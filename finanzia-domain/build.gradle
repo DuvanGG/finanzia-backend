@@ -1,0 +1,11 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    // Jakarta Validation API (solo la interfaz, sin implementación de Spring)
+    api 'jakarta.validation:jakarta.validation-api:3.0.2'
+    
+    // Testing puro
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
+}

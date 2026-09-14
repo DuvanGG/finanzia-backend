@@ -1,0 +1,50 @@
+# ==========================================
+# 1. Gradle (Build outputs & cache)
+# ==========================================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ==========================================
+# 2. IDEs (IntelliJ, VS Code, Eclipse)
+# ==========================================
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+
+# ==========================================
+# 3. Sistemas Operativos
+# ==========================================
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ==========================================
+# 4. Archivos de entorno y secretos
+# ==========================================
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# ==========================================
+# 5. Logs y temporales
+# ==========================================
+*.log
+logs/
+tmp/
+temp/
+
+# ==========================================
+# 6. Docker (Opcional)
+# ==========================================
+# Ignora overrides locales que no deben subirse
+docker-compose.override.yml

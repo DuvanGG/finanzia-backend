@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # 1. Base de datos relacional para datos transaccionales (Usuarios, Transacciones, Presupuestos)
+  postgres:
+    image: postgres:16-alpine
+    container_name: finanzia-postgres
+    environment:
+      POSTGRES_DB: finanzia_db
+      POSTGRES_USER: finanzia_user
+      POSTGRES_PASSWORD: finanzia_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finanzia_user -d finanzia_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 2. Emulador local de AWS (S3 para archivos/recibos, DynamoDB para logs de auditoría)
+  localstack:
+    image: localstack/localstack:3.5.0
+    container_name: finanzia-localstack
+    environment:
+      - SERVICES=s3,dynamodb
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+      - DEFAULT_REGION=us-east-1
+    ports:
+      - "4566:4566" # Puerto principal de LocalStack
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  localstack_data:

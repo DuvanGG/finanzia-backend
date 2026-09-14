@@ -1,0 +1,30 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+dependencies {
+    // Conecta todos los módulos
+    implementation project(':finanzia-api')
+    implementation project(':finanzia-infrastructure')
+    
+    // Actuator para métricas y health checks (buena práctica)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    
+    // H2 Database para desarrollo local rápido (opcional, pero recomendado)
+    runtimeOnly 'com.h2database:h2:2.3.232'
+}
+
+springBoot {
+    mainClass = 'com.finanzia.FinanziaApplication'
+}
+
+// Configuración del JAR ejecutable
+bootJar {
+    archiveBaseName = 'finanzia'
+    archiveVersion = project.version
+}
+
+// Desactivamos el JAR plano, solo queremos el bootJar
+jar {
+    enabled = false
+}

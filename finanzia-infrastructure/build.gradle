@@ -1,0 +1,29 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    api project(':finanzia-application')
+    
+    // Spring Data JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    
+    // PostgreSQL Driver
+    runtimeOnly 'org.postgresql:postgresql:42.7.4'
+    
+    // AWS SDK (BOM para manejar versiones automáticamente)
+    implementation platform('software.amazon.awssdk:bom:2.28.0')
+    implementation 'software.amazon.awssdk:s3'
+    implementation 'software.amazon.awssdk:dynamodb'
+    implementation 'software.amazon.awssdk:dynamodb-enhanced'
+    
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    
+    // Testcontainers para pruebas de integración locales
+    testImplementation 'org.testcontainers:testcontainers:1.20.3'
+    testImplementation 'org.testcontainers:junit-jupiter:1.20.3'
+    testImplementation 'org.testcontainers:postgresql:1.20.3'
+    testImplementation 'org.testcontainers:localstack:1.20.3'
+}

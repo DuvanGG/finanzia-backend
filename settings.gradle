@@ -1,0 +1,14 @@
+rootProject.name = 'finanzia'
+
+// Estas líneas son las que le dicen a Gradle que existen los sub-módulos
+include 'finanzia-domain'
+include 'finanzia-application'
+include 'finanzia-infrastructure'
+include 'finanzia-api'
+include 'finanzia-bootstrap'
+
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
