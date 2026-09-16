@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: finanzia
+  
+  # Configuración de PostgreSQL (conectando al Docker)
+  datasource:
+    url: jdbc:postgresql://localhost:5433/finanzia_db
+    username: finanzia_user
+    password: finanzia_password
+    driver-class-name: org.postgresql.Driver
+  
+  # JPA / Hibernate
+  jpa:
+    hibernate:
+      ddl-auto: validate  # No crea tablas automáticamente (usaremos Flyway después)
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+  
+  # Desactivar Flyway por ahora (lo activaremos cuando creemos las migraciones)
+  flyway:
+    enabled: false
+
+# Configuración de AWS (apuntando a LocalStack local)
+aws:
+  region: us-east-1
+  s3:
+    bucket: finanzia-documents
+    endpoint: http://localhost:4566
+    access-key: test
+    secret-key: test
+  dynamodb:
+    endpoint: http://localhost:4566
+    access-key: test
+    secret-key: test
+
+# Puerto del servidor
+server:
+  port: 8080
+
+# Logging
+logging:
+  level:
+    root: INFO
+    com.finanzia: DEBUG
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+
+# Actuator (health checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: always
