@@ -19,6 +19,12 @@ build/
 *.swo
 *~
 
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
 # ==========================================
 # 3. Sistemas Operativos
 # ==========================================

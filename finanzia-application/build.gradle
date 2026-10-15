@@ -5,6 +5,9 @@ plugins {
 dependencies {
     // Jakarta Validation API (solo la interfaz, sin implementación de Spring)
     api 'jakarta.validation:jakarta.validation-api:3.0.2'
+
+    // Capa de dominio (la capa de aplicación depende del dominio, no de Spring)
+    implementation project(':finanzia-domain')
     
     // Testing puro
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'

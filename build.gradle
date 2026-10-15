@@ -12,6 +12,12 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'io.spring.dependency-management'
+
+    dependencyManagement {
+        imports {
+            mavenBom 'org.springframework.boot:spring-boot-dependencies:4.1.1'
+        }
+    }
     
     java {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -28,6 +34,7 @@ subprojects {
         testCompileOnly 'org.projectlombok:lombok:1.18.34'
         testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
     tasks.named('test') {

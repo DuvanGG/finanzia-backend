@@ -19,9 +19,15 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
   
-  # Desactivar Flyway por ahora (lo activaremos cuando creemos las migraciones)
+  # Flyway: crea las tablas a partir de las migraciones
   flyway:
-    enabled: false
+    enabled: true
+
+  # Redis (rate limiting / lockout efímero, cache del dashboard futuro)
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 # Configuración de AWS (apuntando a LocalStack local)
 aws:
@@ -35,6 +41,54 @@ aws:
     endpoint: http://localhost:4566
     access-key: test
     secret-key: test
+    audit-table: finanzia-audit
+  ses:
+    endpoint: http://localhost:4566
+    access-key: test
+    secret-key: test
+
+# Configuración de autenticación
+finanzia:
+  jwt:
+    # En producción, el secreto debe venir de la variable de entorno JWT_SECRET (>= 32 bytes)
+    secret: ${JWT_SECRET:dev-only-secret-please-override-0123456789abcdef}
+    issuer: finanzia
+    kid: finanzia-access-v1
+  mail:
+    from: no-reply@finanzia.dev
+    # LocalStack SES exige verificar el remitente; desactivar en AWS real.
+    verify-sender: true
+  # Parámetros del dominio de autenticación
+  auth:
+    issuer: finanzia
+    access-token-ttl: 15m
+    refresh-token-ttl: 7d
+    verify-code-ttl: 24h
+    reset-code-ttl: 15m
+    refresh-grace-window: 30s
+    login-failure-window: 1h
+    max-active-sessions: 10
+    account-lockout:
+      - failures: 5
+        lock-for: 5m
+      - failures: 10
+        lock-for: 15m
+      - failures: 15
+        lock-for: 1h
+    ip-lockout:
+      - failures: 10
+        lock-for: 15m
+    register-window-seconds: 60
+    register-limit: 5
+    recovery-window-seconds: 60
+    recovery-limit: 5
+  # Primer administrador (opcional): se crea al arrancar si no existe
+  admin:
+    email: ${ADMIN_EMAIL:}
+    password: ${ADMIN_PASSWORD:}
+  # Orígenes permitidos para el frontend Angular
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
 
 # Puerto del servidor
 server:

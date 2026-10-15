@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # 1. Base de datos relacional para datos transaccionales (Usuarios, Transacciones, Presupuestos)
   postgres:
@@ -24,7 +22,7 @@ services:
     image: localstack/localstack:3.5.0
     container_name: finanzia-localstack
     environment:
-      - SERVICES=s3,dynamodb
+      - SERVICES=s3,dynamodb,ses
       - DEBUG=1
       - DATA_DIR=/tmp/localstack/data
       - DEFAULT_REGION=us-east-1
@@ -35,6 +33,19 @@ services:
       - "/var/run/docker.sock:/var/run/docker.sock"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:4566/_localstack/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# 3. Redis para estado efímero (rate limiting, lockout, cache del dashboard)
+  redis:
+    image: redis:7-alpine
+    container_name: finanzia-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5

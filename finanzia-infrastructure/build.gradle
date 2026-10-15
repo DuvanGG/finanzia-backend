@@ -4,18 +4,34 @@ plugins {
 
 dependencies {
     api project(':finanzia-application')
+    implementation project(':finanzia-domain')
     
     // Spring Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     
+    // Spring Security crypto + reactive support (BCrypt/PasswordEncoder)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    
+    // Redis (rate limiting / lockout efímero)
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    
     // PostgreSQL Driver
     runtimeOnly 'org.postgresql:postgresql:42.7.4'
+    
+    // JJWT (firma/validación de access tokens)
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+    
+    // Apache Commons (utilidades)
+    implementation 'org.apache.commons:commons-lang3'
     
     // AWS SDK (BOM para manejar versiones automáticamente)
     implementation platform('software.amazon.awssdk:bom:2.28.0')
     implementation 'software.amazon.awssdk:s3'
     implementation 'software.amazon.awssdk:dynamodb'
     implementation 'software.amazon.awssdk:dynamodb-enhanced'
+    implementation 'software.amazon.awssdk:ses'
     
     // MapStruct
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
@@ -26,4 +42,11 @@ dependencies {
     testImplementation 'org.testcontainers:junit-jupiter:1.20.3'
     testImplementation 'org.testcontainers:postgresql:1.20.3'
     testImplementation 'org.testcontainers:localstack:1.20.3'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
+}
+
+tasks.named('test') {
+    // Docker Engine moderno exige API >= 1.40; docker-java 1.20.3 negocia por defecto 1.32.
+    systemProperty 'api.version', '1.44'
+    environment 'DOCKER_API_VERSION', '1.44'
 }
